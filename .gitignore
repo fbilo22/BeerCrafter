@@ -131,3 +131,6 @@ dmypy.json
 # DB
 beercraftDB.db
 beercraftDB.db-journal
+
+# Other
+test.py
