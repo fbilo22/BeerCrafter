@@ -1,0 +1,94 @@
+{% extends "base.html" %} {% block title %}BeerCraft{% endblock %} {% block
+content %}
+
+<!-- Title -->
+<h2 id="title">Sessions</h2>
+
+<!-- Filter container -->
+<div class="container">
+  <div class="row filter-row">
+    <div class="col-6"><i class="fas fa-filter"></i></div>
+    <div class="col-6">
+      <div class="input-group mb-3 search-bar">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search..."
+          aria-label="Search"
+          aria-describedby="button-addon2"
+        />
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
+          id="button-addon2"
+        >
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Container - Displays all instances of available recipes/sessions -->
+<div class="container">
+  <div class="row g-3 recipe-row">
+    <div class="col-6 col-lg-3">
+      <a href="">
+        <div class="card home-card recipe-card">
+          <div class="card-body">
+            <h4>
+              Start a <br />
+              Session
+            </h4>
+            <img
+              class="home-img"
+              src="{{ url_for('static', filename='images/session.png')}}"
+              alt="recipe-icon"
+            />
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-6 col-lg-3">
+      <a href="{{url_for('views.session_page_view')}}">
+        <div class="card session-card recipe-card">
+          <img
+            class="card-img-top session-card-img"
+            src="{{ url_for('static', filename='images/neipa_example.jpg')}}"
+            alt="session-img"
+          />
+          <div class="card-body">
+            <h5 class="card-title">Recipe Name</h5>
+            <h5 class="card-title">Date</h5>
+            <p class="card-text">Rating: 4.5⭐</p>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-6 col-lg-3">
+      <a href="">
+        <div class="card recipe-card">
+          <img class="card-img-top" src="" alt="session-img" />
+          <div class="card-body">
+            <h5 class="card-title">Session Name</h5>
+            <p class="card-text">Session Description</p>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-6 col-lg-3">
+      <a href="">
+        <div class="card recipe-card">
+          <img class="card-img-top" src="" alt="session-img" />
+          <div class="card-body">
+            <h5 class="card-title">Session Name</h5>
+            <p class="card-text">Session Description</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!--"https://cdn.homebrewersassociation.org/wp-content/uploads/2016/04/recipe_freature.jpg"-->
+{% endblock %}

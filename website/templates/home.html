@@ -1,28 +1,82 @@
-{% extends "base.html" %} 
+{% extends "base.html" %} {% block title %}BeerCraft{% endblock %} {% block
+content %}
 
-{% block title %}BeerCraft{% endblock %}
+<h2 id="title">Welcome to BeerCraft!</h2>
 
-{% block content %}
-<div class="p-4 text-center">
-    <h2>Welcome to BeerCraft!</h2>
-</div>
-
-<div class="container">
-    <div class="row g-6">
-        <div class = "col-12 col-md-6 col-lg-6">
-            <div class="card">
-                <div class="card-body" style="text-align:center">
-                    <h5 class="card-title">Create new recipe</h5>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
-                        <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z"/>
-                    </svg>
-                </div>
-            </div>
+<div class="container home-container">
+  <div class="row recipe-row">
+    <div class="col">
+      <a href="#">
+        <div class="card home-card">
+          <div class="card-body">
+            <h4>
+              Create New <br />
+              Recipe
+            </h4>
+            <img
+              class="home-img"
+              src="{{ url_for('static', filename='images/recipe.png')}}"
+              alt="recipe-icon"
+            />
+          </div>
         </div>
+      </a>
     </div>
+    <div class="col">
+      <a href="#">
+        <div class="card home-card">
+          <div class="card-body">
+            <h4>
+              Start a <br />
+              Session
+            </h4>
+            <img
+              class="home-img"
+              src="{{ url_for('static', filename='images/session.png')}}"
+              alt="recipe-icon"
+            />
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <a href="{{ url_for('views.recipes_view')}}">
+        <div class="card home-card">
+          <div class="card-body">
+            <h4>
+              See Existing <br />
+              Recipes
+            </h4>
+            <img
+              class="home-img"
+              src="{{ url_for('static', filename='images/existing_recipes.png')}}"
+              alt="recipe-icon"
+            />
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col">
+      <a href="{{ url_for('views.sessions_view')}}">
+        <div class="card home-card">
+          <div class="card-body">
+            <h4>
+              See Existing <br />
+              Sessions
+            </h4>
+            <img
+              class="home-img"
+              src="{{ url_for('static', filename='images/existing_sessions.png')}}"
+              alt="recipe-icon"
+            />
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
 </div>
-
-
 
 <!--"https://cdn.homebrewersassociation.org/wp-content/uploads/2016/04/recipe_freature.jpg"-->
 {% endblock %}
