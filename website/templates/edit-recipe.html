@@ -1,0 +1,212 @@
+{% extends "base.html" %} {% block title %}BeerCraft{% endblock %} {% block
+content %}
+
+<!-- Title -->
+<h2 id="title">Edit {{recipe.recipe_name}} Recipe</h2>
+
+<!-- Main Content -->
+<div class="container-fluid p-2">
+  <form
+    action="{{url_for('views.edit_recipe_view', recipe_name=recipe.recipe_name)}}"
+    ,
+    method="POST"
+  >
+    <div class="form-group">
+      <!-- RECIPE GENERAL -->
+      <h4>General</h4>
+      <label class="input-label" for="recipe_name">Recipe Name: </label>
+      <input
+        type="text"
+        name="recipe_name"
+        id="recipe_name"
+        value="{{recipe.recipe_name}}"
+      /><br />
+      <label class="input-label" for="beer_style">Beer Style: </label>
+      <input
+        type="text"
+        name="beer_style"
+        id="beer_style"
+        value="{{recipe.beer_style}}"
+      /><br />
+      <label class="input-label" for="IBU">IBU: </label>
+      <input type="number" name="IBU" id="IBU" value="{{recipe.IBU}}" /><br />
+      <label class="input-label" for="mash_time">Mash Time(min): </label>
+      <input
+        type="number"
+        name="mash_time"
+        id="mash_time"
+        value="{{recipe.mash_time}}"
+      /><br />
+      <label class="input-label" for="mash_temp">Mash Temp(°F): </label>
+      <input
+        type="number"
+        name="mash_temp"
+        id="mash_temp"
+        value="{{recipe.mash_temp}}"
+      /><br />
+      <label class="input-label" for="abv">ABV(%): </label>
+      <input
+        type="number"
+        step="0.1"
+        name="abv"
+        id="abv"
+        value="{{recipe.abv}}"
+      /><br />
+      <label class="input-label" for="grav_og">Original Gravity: </label>
+      <input
+        type="number"
+        step="0.001"
+        name="grav_og"
+        id="grav_og"
+        value="{{recipe.grav_og}}"
+      /><br />
+      <label class="input-label" for="grav_fn">Final Gravity: </label>
+      <input
+        type="number"
+        step="0.001"
+        name="grav_fn"
+        id="grav_fn"
+        value="{{recipe.grav_fn}}"
+      />
+    </div>
+    <!-- INGREDIENTS -->
+    <div class="form-group">
+      <h4>Ingredients</h4>
+      <!-- GRAINS -->
+      <h5>Grains</h5>
+      {% for grain in recipe.get_grains() %}
+      <div class="form-ingredient">
+        <label for="{{grain.grain_name}}">Grain: </label>
+        <input
+          type="text"
+          name="{{grain.grain_name}}"
+          id="{{grain.grain_name}}"
+          value="{{grain.grain_name}}"
+        />
+        <label for="{{grain.grain_name + '-qty'}}">Quantity(kg): </label>
+        <input
+          class="input-small"
+          type="number"
+          step="0.1"
+          name="{{grain.grain_name + '-qty'}}"
+          id="{{grain.grain_name + '-qty'}}"
+          value="{{grain.quantity}}"
+        />
+        <a href=""><i class="fas fa-minus-circle"></i></a>
+        <br />
+      </div>
+      {% endfor %}
+      <a href=""><i class="fas fa-plus-circle"></i></a><br />
+      <!-- HOPS -->
+      <h5>Hops</h5>
+      {% for hop in recipe.get_hops() %}
+      <div class="form-ingredient">
+        <label for="{{hop.hop_name}}">Hops: </label>
+        <input
+          type="text"
+          name="{{hop.hop_name}}"
+          id="{{hop.hop_name}}"
+          value="{{hop.hop_name}}"
+        />
+        <label for="{{hop.hop_name + '-qty'}}">Quantity(oz): </label>
+        <input
+          class="input-small"
+          type="number"
+          step="0.1"
+          name="{{hop.hop_name + '-qty'}}"
+          id="{{hop.hop_name + '-qty'}}"
+          value="{{hop.quantity}}"
+        />
+        <a href=""><i class="fas fa-minus-circle"></i></a>
+        <br />
+        <select name="{{hop.hop_name + '-use'}}">
+          {% if hop.use_type == 'Boil' %}
+          <option value="boil" selected>Boil</option>
+          {% else %}
+          <option value="boil">Boil</option>
+          {% endif %} {% if hop.use_type == 'Whirlpool' %}
+          <option value="whirlpool" selected>Whirlpool</option>
+          {% else %}
+          <option value="whirlpool">Whirlpool</option>
+          {% endif %} {% if hop.use_type == 'Dry Hop' %}
+          <option value="dryhop" selected>Dry Hop</option>
+          {% else %}
+          <option value="dryhop">Dry Hop</option>
+          {% endif %}
+        </select>
+        <label for="{{hop.hop_name + '-time'}}">Time(min/days): </label>
+        <input
+          class="input-small"
+          type="number"
+          name="{{hop.hop_name + '-time'}}"
+          id="{{hop.hop_name + '-time'}}"
+          value="{{hop.use_time}}"
+        />
+      </div>
+      {% endfor %}
+      <a href=""><i class="fas fa-plus-circle"></i></a><br />
+      <!-- YEAST -->
+      <h5>Yeast</h5>
+      {% for yeast in recipe.get_yeast() %}
+      <div class="form-ingredient">
+        <label for="{{yeast.yest_name}}">Yeast: </label>
+        <input
+          type="text"
+          name="{{yeast.yest_name}}"
+          id="{{yeast.yest_name}}"
+          value="{{yeast.yest_name}}"
+        />
+      </div>
+      {% endfor %}
+      <!-- OTHER -->
+      <h5>Other Ingredients</h5>
+      {% for other in recipe.get_other() %}
+      <div class="form-ingredient">
+        <label for="{{other.ing_name}}">Other: </label>
+        <input
+          type="text"
+          name="{{other.ing_name}}"
+          id="{{other.ing_name}}"
+          value="{{other.ing_name}}"
+        />
+        <label for="{{other.ing_name + '-qty'}}">Quantity(kg): </label>
+        <input
+          class="input-small"
+          type="number"
+          step="0.1"
+          name="{{other.ing_name + '-qty'}}"
+          id="{{other.ing_name + '-qty'}}"
+          value="{{other.quantity}}"
+        /><br />
+        <label for="{{other.ing_name + '-details'}}">Details: </label>
+        <input
+          class="input-large"
+          type="text"
+          name="{{other.ing_name + '-details'}}"
+          id="{{other.ing_name + '-details'}}"
+          value="{{other.details}}"
+        />
+      </div>
+      {% endfor %}
+      <a href=""><i class="fas fa-plus-circle"></i></a><br />
+    </div>
+    <!-- INSTRUCTIONS -->
+    <div class="form-group">
+      <h4>Instructions</h4>
+      <textarea name="instructions" id="instructions" cols="50" rows="5">
+{% for note in recipe.get_note() %}{{note.note}}
+      {% endfor %}
+      </textarea>
+    </div>
+    <!-- SUBMIT FORM BUTTON -->
+    <input
+      type="submit"
+      name="submit"
+      id="submit"
+      value="Edit"
+      class="btn btn-dark bg-darkorange"
+    />
+  </form>
+</div>
+
+{% endblock %}

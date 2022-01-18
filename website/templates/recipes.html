@@ -4,7 +4,7 @@ content %}
 <!-- Title -->
 <h2 id="title">Recipes</h2>
 
-<!-- Filter container -->
+<!-- Filter and Search container -->
 <div class="container">
   <div class="row filter-row">
     <div class="col-6"><i class="fas fa-filter"></i></div>
@@ -32,8 +32,9 @@ content %}
 <!-- Main Container - Displays all instances of available recipes/sessions -->
 <div class="container">
   <div class="row g-3 recipe-row">
+    <!-- Create new recipe card. Always displayed first-->
     <div class="col-6 col-lg-3">
-      <a href="">
+      <a href="{{url_for('views.create_recipe_view')}}">
         <div class="card home-card recipe-card">
           <div class="card-body">
             <h4>
@@ -49,8 +50,12 @@ content %}
         </div>
       </a>
     </div>
+    <!-- For Loop to display all the recipes in the database -->
+    {% for recipe in recipes_list %}
     <div class="col-6 col-lg-3">
-      <a href="{{ url_for('views.recipe_page_view')}}">
+      <a
+        href="{{ url_for('views.recipe_page_view', recipe_name=recipe.recipe_name)}}"
+      >
         <div class="card recipe-card">
           <img
             class="card-img-top"
@@ -58,43 +63,14 @@ content %}
             alt="Recipe"
           />
           <div class="card-body">
-            <h5 class="card-title">Recipe Name</h5>
+            <h5 class="card-title">{{recipe.recipe_name}}</h5>
             <p class="card-text">Beer Style</p>
             <p class="card-text">ABV% <span class="card-rating">4.5⭐</span></p>
           </div>
         </div>
       </a>
     </div>
-    <div class="col-6 col-lg-3">
-      <a href="">
-        <div class="card recipe-card">
-          <img
-            class="card-img-top"
-            src="{{ url_for('static', filename='images/recipe_picture.jpg')}}"
-            alt="Recipe"
-          />
-          <div class="card-body">
-            <h5 class="card-title">Recipe Name</h5>
-            <p class="card-text">Recipe Description</p>
-          </div>
-        </div>
-      </a>
-    </div>
-    <div class="col-6 col-lg-3">
-      <a href="">
-        <div class="card recipe-card">
-          <img
-            class="card-img-top"
-            src="{{ url_for('static', filename='images/recipe_picture.jpg')}}"
-            alt="Recipe"
-          />
-          <div class="card-body">
-            <h5 class="card-title">Recipe Name</h5>
-            <p class="card-text">Recipe Description</p>
-          </div>
-        </div>
-      </a>
-    </div>
+    {% endfor %}
   </div>
 </div>
 

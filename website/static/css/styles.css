@@ -59,6 +59,10 @@ a {
   margin-bottom: 16px;
 }
 
+.rating-star {
+  font-size: 3rem;
+}
+
 .search-bar {
   max-width: 335px;
   float: right;
@@ -155,7 +159,6 @@ a.footer-link {
   bottom: 0;
   color: white;
   left: 0;
-  position: fixed;
   width: 100%;
   height: 80px;
   padding: 15px 5px;
@@ -177,6 +180,36 @@ a.footer-link {
 
 .nav-item {
   padding-right: 16px;
+}
+
+/****** FROMS & INPUTS ******/
+.form-group {
+  margin: 32px auto;
+  padding: 10px 16px;
+}
+
+.input-label {
+  width: 200px;
+}
+
+.input-small {
+  width: 100px;
+}
+
+.input-large {
+  width: 400px;
+}
+
+.form-ingredient {
+  margin-top: 20px;
+}
+
+.form-group > a {
+  color: #ae431e;
+}
+
+.form-ingredient > a {
+  color: #ae431e;
 }
 
 /****** CONTAINERS ******/

@@ -1,0 +1,200 @@
+{% extends "base.html" %} {% block title %}BeerCraft{% endblock %} {% block
+content %}
+
+<!-- Title -->
+<h2 id="title">Create New Recipe</h2>
+
+<!-- Main Content -->
+<div class="container-fluid p-2">
+  <form action="{{url_for('views.create_recipe_view')}}" , method="POST">
+    <div class="form-group">
+      <!-- RECIPE GENERAL8 -->
+      <h4>General</h4>
+      <label class="input-label" for="recipe_name">Recipe Name: </label>
+      <input
+        type="text"
+        name="recipe_name"
+        id="recipe_name"
+        placeholder="Recipe Name"
+      /><br />
+      <label class="input-label" for="beer_style">Beer Style: </label>
+      <input
+        type="text"
+        name="beer_style"
+        id="beer_style"
+        placeholder="Beer Style"
+      /><br />
+      <label class="input-label" for="IBU">IBU: </label>
+      <input type="number" name="IBU" id="IBU" placeholder="25" /><br />
+      <label class="input-label" for="mash_time">Mash Time(min): </label>
+      <input
+        type="number"
+        name="mash_time"
+        id="mash_time"
+        placeholder="60"
+      /><br />
+      <label class="input-label" for="mash_temp">Mash Temp(°F): </label>
+      <input
+        type="number"
+        name="mash_temp"
+        id="mash_temp"
+        placeholder="152"
+      /><br />
+      <label class="input-label" for="abv">ABV(%): </label>
+      <input
+        type="number"
+        step="0.1"
+        name="abv"
+        id="abv"
+        placeholder="5.5"
+      /><br />
+      <label class="input-label" for="grav_og">Original Gravity: </label>
+      <input
+        type="number"
+        step="0.001"
+        name="grav_og"
+        id="grav_og"
+        placeholder="1.050"
+      /><br />
+      <label class="input-label" for="grav_fn">Final Gravity: </label>
+      <input
+        type="number"
+        step="0.001"
+        name="grav_fn"
+        id="grav_fn"
+        placeholder="1.019"
+      />
+    </div>
+    <!-- INGREDIENTS -->
+    <div class="form-group">
+      <h4>Ingredients</h4>
+      <!-- GRAINS -->
+      <h5>Grains</h5>
+      <div class="form-ingredient">
+        <label for="grain1">Grain: </label>
+        <input type="text" name="grain1" id="grain1" placeholder="Grain Name" />
+        <label for="grain1-qty">Quantity(kg): </label>
+        <input
+          class="input-small"
+          type="number"
+          step="0.1"
+          name="grain1-qty"
+          id="grain1-qty"
+          placeholder="1.5"
+        /><br />
+      </div>
+      <a href=""><i class="fas fa-plus-circle"></i></a><br />
+      <!-- HOPS -->
+      <h5>Hops</h5>
+      <div class="form-ingredient">
+        <label for="hops1">Hops: </label>
+        <input type="text" name="hops1" id="hops1" placeholder="Hops Name" />
+        <label for="hops1-qty">Quantity(oz): </label>
+        <input
+          class="input-small"
+          type="number"
+          step="0.1"
+          name="hops1-qty"
+          id="hops1-qty"
+          placeholder="0.5"
+        /><br />
+        <select name="hops1-use">
+          <option value="boil">Boil</option>
+          <option value="whirlpool">Whirlpool</option>
+          <option value="dryhop">Dry Hop</option>
+        </select>
+        <label for="hops1-time">Time(min/days): </label>
+        <input
+          class="input-small"
+          type="number"
+          name="hops1-time"
+          id="hops1-time"
+          placeholder="5"
+        />
+      </div>
+      <!-- HOPS 2 -->
+      <div class="form-ingredient">
+        <label for="hops2">Hops: </label>
+        <input type="text" name="hops2" id="hops2" placeholder="Hops Name" />
+        <label for="hops1-qty">Quantity(oz): </label>
+        <input
+          class="input-small"
+          type="number"
+          step="0.1"
+          name="hops2-qty"
+          id="hops2-qty"
+          placeholder="0.5"
+        /><br />
+        <select name="hops2-use">
+          <option value="boil">Boil</option>
+          <option value="whirlpool">Whirlpool</option>
+          <option value="dryhop">Dry Hop</option>
+        </select>
+        <label for="hops2-time">Time(min): </label>
+        <input
+          class="input-small"
+          type="number"
+          name="hops2-time"
+          id="hops2-time"
+          placeholder="5"
+        />
+      </div>
+      <a href=""><i class="fas fa-plus-circle"></i></a><br />
+      <!-- YEAST -->
+      <h5>Yeast</h5>
+      <div class="form-ingredient">
+        <label for="yeast">Yeast: </label>
+        <input type="text" name="yeast" id="yeast" placeholder="Yeast Name" />
+      </div>
+      <!-- OTHER -->
+      <h5>Other Ingredients</h5>
+      <div class="form-ingredient">
+        <label for="other1">Other: </label>
+        <input
+          type="text"
+          name="other1"
+          id="other1"
+          placeholder="Other Ingredient Name"
+        />
+        <label for="other1-qty">Quantity(kg): </label>
+        <input
+          class="input-small"
+          type="number"
+          step="0.1"
+          name="other1-qty"
+          id="other1-qty"
+          placeholder="0.2"
+        /><br />
+        <label for="other1-details">Details: </label>
+        <input
+          class="input-large"
+          type="text"
+          name="other1-detail"
+          id="other1-details"
+          placeholder="Details"
+        />
+      </div>
+      <a href=""><i class="fas fa-plus-circle"></i></a><br />
+    </div>
+    <!-- INSTRUCTIONS -->
+    <div class="form-group">
+      <h4>Instructions</h4>
+      <textarea
+        name="instructions"
+        id="instructions"
+        cols="50"
+        rows="5"
+      ></textarea>
+    </div>
+    <!-- SUBMIT FORM BUTTON -->
+    <input
+      type="submit"
+      name="submit"
+      id="submit"
+      value="Create"
+      class="btn btn-dark bg-darkorange"
+    />
+  </form>
+</div>
+
+{% endblock %}

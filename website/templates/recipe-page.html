@@ -3,12 +3,18 @@ content %}
 
 <!-- Sessions header -->
 <div class="recipe-header">
-  <a href="#"> <i class="fas fa-edit"></i> Edit Recipe </a>
-  <a href="{{url_for ('views.sessions_view')}}"> <i class="fas fa-eye"></i> See Sessions </a>
+  <a
+    href="{{url_for('views.edit_recipe_view', recipe_name=recipe.recipe_name)}}"
+  >
+    <i class="fas fa-edit"></i> Edit Recipe
+  </a>
+  <a href="{{url_for ('views.sessions_view')}}">
+    <i class="fas fa-eye"></i> See Sessions
+  </a>
   <a href="#"> <i class="fas fa-plus-circle"></i> New Session </a>
 </div>
 <!-- Title -->
-<h2 id="title">Recipe Name</h2>
+<h2 id="title">{{recipe.recipe_name}}</h2>
 
 <!-- Main Content -->
 <section>
@@ -17,18 +23,22 @@ content %}
       <div class="row mt-3">
         <div class="col-4 general-col">
           <h4>Beer Style</h4>
-          <p class="variable">Pale Ale</p>
+          <p class="variable">{{recipe.beer_style}}</p>
+          <h4>IBU</h4>
+          <p class="variable">{{recipe.IBU}}</p>
         </div>
         <div class="col-4 general-col">
           <h4>Mash Time</h4>
-          <p><span class="variable">60</span> min</p>
+          <p><span class="variable">{{recipe.mash_time}}</span> min</p>
+          <h4>Mash Temp</h4>
+          <p><span class="variable">{{recipe.mash_temp}}</span> °F</p>
         </div>
         <div class="col-4 general-col">
           <h4>ABV</h4>
-          <p><span class="variable">5.5</span> %</p>
+          <p><span class="variable">{{recipe.abv}}</span> %</p>
           <p>
-            OG: <span class="variable"> 1.050</span> <br />FG:
-            <span class="variable"> 1.019</span>
+            OG: <span class="variable"> {{recipe.grav_og}}</span> <br />FG:
+            <span class="variable"> {{recipe.grav_fn}}</span>
           </p>
         </div>
       </div>
@@ -45,28 +55,39 @@ content %}
             <h4>Grains</h4>
           </div>
           <div class="card-body">
+            {% for grain in recipe.get_grains() %}
             <div class="ingredient">
-              <img class="ingredient-img" src="{{url_for('static', filename=
-              'images/wheat.png')}}" alt="grain-img">
-              <p><span class="variable">Pilsner Malt</span><span class="qty"> 
-                <span class="variable">1.5</span> kg</span>
+              <img
+                class="ingredient-img"
+                src="{{url_for('static', filename=
+              'images/wheat.png')}}"
+                alt="grain-img"
+              />
+              <p>
+                <span class="variable">{{grain.grain_name}}</span
+                ><span class="qty">
+                  <span class="variable">{{grain.quantity}}</span> kg</span
+                >
               </p>
             </div>
+            {% endfor %}
           </div>
         </div>
       </div>
-      <div class="col-md-6"><div class="card">
-        <div class="card-title">
-          <h4>Yeast</h4>
-        </div>
-        <div class="card-body">
-          <div class="ingredient">
-            <p class="variable">Omega OYL-011
-            </p>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-title">
+            <h4>Yeast</h4>
           </div>
-          
+          <div class="card-body">
+            {% for yeast in recipe.get_yeast()%}
+            <div class="ingredient">
+              <p class="variable">{{yeast.yeast_name}}</p>
+            </div>
+            {% endfor %}
+          </div>
         </div>
-      </div></div>
+      </div>
     </div>
     <div class="row">
       <div class="col-md-6">
@@ -75,49 +96,66 @@ content %}
             <h4>Hops</h4>
           </div>
           <div class="card-body">
+            {% for hop in recipe.get_hops() %}
             <div class="ingredient">
-              <img class="ingredient-img" src="{{url_for('static', filename=
-              'images/hop.png')}}" alt="hop-img">
-              <p><span class="variable">Cascade</span><span class="qty"> 
-                <span class="variable">0.5</span> oz</span>
-              <p><span class="variable use-method">Boil</span><span class="qty"> 
-                <span class="variable">5</span> min</span>
+              <img
+                class="ingredient-img"
+                src="{{url_for('static', filename=
+              'images/hop.png')}}"
+                alt="hop-img"
+              />
+              <p>
+                <span class="variable">{{hop.hop_name}}</span
+                ><span class="qty">
+                  <span class="variable">{{hop.quantity}}</span> oz</span
+                >
+              </p>
+
+              <p>
+                <span class="variable use-method">{{hop.use_type}}</span
+                ><span class="qty">
+                  <span class="variable">{{hop.use_time}}</span> min/days</span
+                >
               </p>
             </div>
-            <div class="ingredient">
-              <img class="ingredient-img" src="{{url_for('static', filename=
-              'images/hop.png')}}" alt="hop-img">
-              <p><span class="variable">Nelson Sauvin</span><span class="qty"> 
-                <span class="variable">2</span> oz</span>
-              <p><span class="variable use-method">Whirlpool</span><span class="qty"> 
-                <span class="variable">15</span> min</span>
-              </p>
-            </div>
+            {% endfor %}
           </div>
-      </div>
+        </div>
       </div>
       <div class="col-md-6">
         <div class="card">
           <div class="card-title">
-            <h4>Other</h4>
+            <h4>Other Ingredients</h4>
           </div>
           <div class="card-body">
+            {% for other in recipe.get_other() %}
             <div class="ingredient">
-              <p><span class="variable">Secret Ingredient</span><span class="qty"> 
-                <span class="variable">0.1</span> kg</span>
-              <p>Details: <span class="variable use-method">Add 5 min into the boil </span>
+              <p>
+                <span class="variable">{{other.ing_name}}</span
+                ><span class="qty">
+                  <span class="variable">{{other.quantity}}</span> kg</span
+                >
+              </p>
+
+              <p>
+                Details:
+                <span class="variable use-method">{{other.details}} </span>
               </p>
             </div>
+            {% endfor %}
           </div>
+        </div>
       </div>
+    </div>
   </div>
 </section>
 <section>
   <h4 class="title-instructions">Instructions</h4>
+  {% for note in recipe.get_note() %}
   <div class="container-fluid">
-    <p class="variable">1. Do This <br>2. Do that</p>
+    <pre class="variable">{{note.note}}</pre>
   </div>
-  
+  {% endfor %}
 </section>
 
 {% endblock %}
