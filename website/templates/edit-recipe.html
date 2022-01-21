@@ -74,121 +74,133 @@ content %}
       <h4>Ingredients</h4>
       <!-- GRAINS -->
       <h5>Grains</h5>
-      {% for grain in recipe.get_grains() %}
-      <div class="form-ingredient">
-        <label for="{{grain.grain_name}}">Grain: </label>
-        <input
-          type="text"
-          name="{{grain.grain_name}}"
-          id="{{grain.grain_name}}"
-          value="{{grain.grain_name}}"
-        />
-        <label for="{{grain.grain_name + '-qty'}}">Quantity(kg): </label>
-        <input
-          class="input-small"
-          type="number"
-          step="0.1"
-          name="{{grain.grain_name + '-qty'}}"
-          id="{{grain.grain_name + '-qty'}}"
-          value="{{grain.quantity}}"
-        />
-        <a href=""><i class="fas fa-minus-circle"></i></a>
-        <br />
+      <div id="form-grains">
+        {% for grain in recipe.get_grains() %}
+        <div class="form-ingredient">
+          <label for="{{grain.grain_name}}">Grain: </label>
+          <input
+            type="text"
+            name="{{grain.grain_name}}"
+            id="{{grain.grain_name}}"
+            value="{{grain.grain_name}}"
+          />
+          <label for="{{grain.grain_name + '-qty'}}">Quantity(kg): </label>
+          <input
+            class="input-small"
+            type="number"
+            step="0.1"
+            name="{{grain.grain_name + '-qty'}}"
+            id="{{grain.grain_name + '-qty'}}"
+            value="{{grain.quantity}}"
+          />
+          <br />
+        </div>
+        {% endfor %}
+        <input type="hidden" name="grains-num" id="grains-num" value="1" />
       </div>
-      {% endfor %}
-      <a href=""><i class="fas fa-plus-circle"></i></a><br />
+      <a onclick="addGrain()"><i class="fas fa-plus-circle"></i></a>
+      <a onclick="removeGrain()"><i class="fas fa-minus-circle"></i></a><br />
       <!-- HOPS -->
       <h5>Hops</h5>
-      {% for hop in recipe.get_hops() %}
-      <div class="form-ingredient">
-        <label for="{{hop.hop_name}}">Hops: </label>
-        <input
-          type="text"
-          name="{{hop.hop_name}}"
-          id="{{hop.hop_name}}"
-          value="{{hop.hop_name}}"
-        />
-        <label for="{{hop.hop_name + '-qty'}}">Quantity(oz): </label>
-        <input
-          class="input-small"
-          type="number"
-          step="0.1"
-          name="{{hop.hop_name + '-qty'}}"
-          id="{{hop.hop_name + '-qty'}}"
-          value="{{hop.quantity}}"
-        />
-        <a href=""><i class="fas fa-minus-circle"></i></a>
-        <br />
-        <select name="{{hop.hop_name + '-use'}}">
-          {% if hop.use_type == 'Boil' %}
-          <option value="boil" selected>Boil</option>
-          {% else %}
-          <option value="boil">Boil</option>
-          {% endif %} {% if hop.use_type == 'Whirlpool' %}
-          <option value="whirlpool" selected>Whirlpool</option>
-          {% else %}
-          <option value="whirlpool">Whirlpool</option>
-          {% endif %} {% if hop.use_type == 'Dry Hop' %}
-          <option value="dryhop" selected>Dry Hop</option>
-          {% else %}
-          <option value="dryhop">Dry Hop</option>
-          {% endif %}
-        </select>
-        <label for="{{hop.hop_name + '-time'}}">Time(min/days): </label>
-        <input
-          class="input-small"
-          type="number"
-          name="{{hop.hop_name + '-time'}}"
-          id="{{hop.hop_name + '-time'}}"
-          value="{{hop.use_time}}"
-        />
+      <div id="form-hops">
+        {% for hop in recipe.get_hops() %}
+        <div class="form-ingredient">
+          <label for="{{hop.hop_name}}">Hops: </label>
+          <input
+            type="text"
+            name="{{hop.hop_name}}"
+            id="{{hop.hop_name}}"
+            value="{{hop.hop_name}}"
+          />
+          <label for="{{hop.hop_name + '-qty'}}">Quantity(oz): </label>
+          <input
+            class="input-small"
+            type="number"
+            step="0.1"
+            name="{{hop.hop_name + '-qty'}}"
+            id="{{hop.hop_name + '-qty'}}"
+            value="{{hop.quantity}}"
+          />
+          <br />
+          <select name="{{hop.hop_name + '-use'}}">
+            {% if hop.use_type == 'Boil' %}
+            <option value="boil" selected>Boil</option>
+            {% else %}
+            <option value="boil">Boil</option>
+            {% endif %} {% if hop.use_type == 'Whirlpool' %}
+            <option value="whirlpool" selected>Whirlpool</option>
+            {% else %}
+            <option value="whirlpool">Whirlpool</option>
+            {% endif %} {% if hop.use_type == 'Dry Hop' %}
+            <option value="dryhop" selected>Dry Hop</option>
+            {% else %}
+            <option value="dryhop">Dry Hop</option>
+            {% endif %}
+          </select>
+          <label for="{{hop.hop_name + '-time'}}">Time(min/days): </label>
+          <input
+            class="input-small"
+            type="number"
+            name="{{hop.hop_name + '-time'}}"
+            id="{{hop.hop_name + '-time'}}"
+            value="{{hop.use_time}}"
+          />
+        </div>
+        {% endfor %}
+        <input type="hidden" name="hops-num" id="hops-num" value="1" />
       </div>
-      {% endfor %}
-      <a href=""><i class="fas fa-plus-circle"></i></a><br />
+      <a onclick="addHop()"><i class="fas fa-plus-circle"></i></a>
+      <a onclick="removeHop()"><i class="fas fa-minus-circle"></i></a>
+      <br />
       <!-- YEAST -->
       <h5>Yeast</h5>
       {% for yeast in recipe.get_yeast() %}
       <div class="form-ingredient">
-        <label for="{{yeast.yest_name}}">Yeast: </label>
+        <label for="yeast">Yeast: </label>
         <input
           type="text"
-          name="{{yeast.yest_name}}"
-          id="{{yeast.yest_name}}"
-          value="{{yeast.yest_name}}"
+          name="yeast"
+          id="yeast"
+          value="{{yeast.yeast_name}}"
         />
       </div>
       {% endfor %}
       <!-- OTHER -->
       <h5>Other Ingredients</h5>
-      {% for other in recipe.get_other() %}
-      <div class="form-ingredient">
-        <label for="{{other.ing_name}}">Other: </label>
-        <input
-          type="text"
-          name="{{other.ing_name}}"
-          id="{{other.ing_name}}"
-          value="{{other.ing_name}}"
-        />
-        <label for="{{other.ing_name + '-qty'}}">Quantity(kg): </label>
-        <input
-          class="input-small"
-          type="number"
-          step="0.1"
-          name="{{other.ing_name + '-qty'}}"
-          id="{{other.ing_name + '-qty'}}"
-          value="{{other.quantity}}"
-        /><br />
-        <label for="{{other.ing_name + '-details'}}">Details: </label>
-        <input
-          class="input-large"
-          type="text"
-          name="{{other.ing_name + '-details'}}"
-          id="{{other.ing_name + '-details'}}"
-          value="{{other.details}}"
-        />
+      <div id="form-other">
+        {% for other in recipe.get_other() %}
+        <div class="form-ingredient">
+          <label for="{{other.ing_name}}">Other: </label>
+          <input
+            type="text"
+            name="{{other.ing_name}}"
+            id="{{other.ing_name}}"
+            value="{{other.ing_name}}"
+          />
+          <label for="{{other.ing_name + '-qty'}}">Quantity(kg): </label>
+          <input
+            class="input-small"
+            type="number"
+            step="0.1"
+            name="{{other.ing_name + '-qty'}}"
+            id="{{other.ing_name + '-qty'}}"
+            value="{{other.quantity}}"
+          /><br />
+          <label for="{{other.ing_name + '-details'}}">Details: </label>
+          <input
+            class="input-large"
+            type="text"
+            name="{{other.ing_name + '-details'}}"
+            id="{{other.ing_name + '-details'}}"
+            value="{{other.details}}"
+          />
+        </div>
+        {% endfor %}
+        <input type="hidden" name="other-num" id="other-num" value="1" />
       </div>
-      {% endfor %}
-      <a href=""><i class="fas fa-plus-circle"></i></a><br />
+      <a onclick="addOther()"><i class="fas fa-plus-circle"></i></a>
+      <a onclick="removeOther()"><i class="fas fa-minus-circle"></i></a>
+      <br />
     </div>
     <!-- INSTRUCTIONS -->
     <div class="form-group">
@@ -208,5 +220,10 @@ content %}
     />
   </form>
 </div>
+
+<script
+  src="{{ url_for('static', filename='js/edit_recipe_script.js')}}"
+  charset="utf-8"
+></script>
 
 {% endblock %}

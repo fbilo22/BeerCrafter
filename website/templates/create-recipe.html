@@ -70,76 +70,63 @@ content %}
       <h4>Ingredients</h4>
       <!-- GRAINS -->
       <h5>Grains</h5>
-      <div class="form-ingredient">
-        <label for="grain1">Grain: </label>
-        <input type="text" name="grain1" id="grain1" placeholder="Grain Name" />
-        <label for="grain1-qty">Quantity(kg): </label>
-        <input
-          class="input-small"
-          type="number"
-          step="0.1"
-          name="grain1-qty"
-          id="grain1-qty"
-          placeholder="1.5"
-        /><br />
+      <div id="form-grains">
+        <div class="form-ingredient" id="template-grain">
+          <label for="grain1">Grain: </label>
+          <input
+            type="text"
+            name="grain1"
+            id="grain1"
+            placeholder="Grain Name"
+          />
+          <label for="grain1-qty">Quantity(kg): </label>
+          <input
+            class="input-small"
+            type="number"
+            step="0.1"
+            name="grain1-qty"
+            id="grain1-qty"
+            placeholder="1.5"
+          /><br />
+        </div>
+        <input type="hidden" name="grains-num" id="grains-num" value="1" />
       </div>
-      <a href=""><i class="fas fa-plus-circle"></i></a><br />
+      <a onclick="addGrain()"><i class="fas fa-plus-circle"></i></a>
+      <a onclick="removeGrain()"><i class="fas fa-minus-circle"></i></a><br />
       <!-- HOPS -->
       <h5>Hops</h5>
-      <div class="form-ingredient">
-        <label for="hops1">Hops: </label>
-        <input type="text" name="hops1" id="hops1" placeholder="Hops Name" />
-        <label for="hops1-qty">Quantity(oz): </label>
-        <input
-          class="input-small"
-          type="number"
-          step="0.1"
-          name="hops1-qty"
-          id="hops1-qty"
-          placeholder="0.5"
-        /><br />
-        <select name="hops1-use">
-          <option value="boil">Boil</option>
-          <option value="whirlpool">Whirlpool</option>
-          <option value="dryhop">Dry Hop</option>
-        </select>
-        <label for="hops1-time">Time(min/days): </label>
-        <input
-          class="input-small"
-          type="number"
-          name="hops1-time"
-          id="hops1-time"
-          placeholder="5"
-        />
+      <div id="form-hops">
+        <div class="form-ingredient" id="template-hops">
+          <label for="hops1">Hops: </label>
+          <input type="text" name="hops1" id="hops1" placeholder="Hops Name" />
+          <label for="hops1-qty">Quantity(oz): </label>
+          <input
+            class="input-small"
+            type="number"
+            step="0.1"
+            name="hops1-qty"
+            id="hops1-qty"
+            placeholder="0.5"
+          /><br />
+          <select name="hops1-use">
+            <option value="boil">Boil</option>
+            <option value="whirlpool">Whirlpool</option>
+            <option value="dryhop">Dry Hop</option>
+          </select>
+          <label for="hops1-time">Time(min/days): </label>
+          <input
+            class="input-small"
+            type="number"
+            name="hops1-time"
+            id="hops1-time"
+            placeholder="5"
+          />
+        </div>
+        <input type="hidden" name="hops-num" id="hops-num" value="1" />
       </div>
-      <!-- HOPS 2 -->
-      <div class="form-ingredient">
-        <label for="hops2">Hops: </label>
-        <input type="text" name="hops2" id="hops2" placeholder="Hops Name" />
-        <label for="hops1-qty">Quantity(oz): </label>
-        <input
-          class="input-small"
-          type="number"
-          step="0.1"
-          name="hops2-qty"
-          id="hops2-qty"
-          placeholder="0.5"
-        /><br />
-        <select name="hops2-use">
-          <option value="boil">Boil</option>
-          <option value="whirlpool">Whirlpool</option>
-          <option value="dryhop">Dry Hop</option>
-        </select>
-        <label for="hops2-time">Time(min): </label>
-        <input
-          class="input-small"
-          type="number"
-          name="hops2-time"
-          id="hops2-time"
-          placeholder="5"
-        />
-      </div>
-      <a href=""><i class="fas fa-plus-circle"></i></a><br />
+      <a onclick="addHop()"><i class="fas fa-plus-circle"></i></a>
+      <a onclick="removeHop()"><i class="fas fa-minus-circle"></i></a>
+      <br />
       <!-- YEAST -->
       <h5>Yeast</h5>
       <div class="form-ingredient">
@@ -148,33 +135,38 @@ content %}
       </div>
       <!-- OTHER -->
       <h5>Other Ingredients</h5>
-      <div class="form-ingredient">
-        <label for="other1">Other: </label>
-        <input
-          type="text"
-          name="other1"
-          id="other1"
-          placeholder="Other Ingredient Name"
-        />
-        <label for="other1-qty">Quantity(kg): </label>
-        <input
-          class="input-small"
-          type="number"
-          step="0.1"
-          name="other1-qty"
-          id="other1-qty"
-          placeholder="0.2"
-        /><br />
-        <label for="other1-details">Details: </label>
-        <input
-          class="input-large"
-          type="text"
-          name="other1-detail"
-          id="other1-details"
-          placeholder="Details"
-        />
+      <div id="form-other">
+        <div class="form-ingredient" id="template-other">
+          <label for="other1">Other: </label>
+          <input
+            type="text"
+            name="other1"
+            id="other1"
+            placeholder="Other Ingredient Name"
+          />
+          <label for="other1-qty">Quantity(kg): </label>
+          <input
+            class="input-small"
+            type="number"
+            step="0.1"
+            name="other1-qty"
+            id="other1-qty"
+            placeholder="0.2"
+          /><br />
+          <label for="other1-details">Details: </label>
+          <input
+            class="input-large"
+            type="text"
+            name="other1-details"
+            id="other1-details"
+            placeholder="Details"
+          />
+        </div>
+        <input type="hidden" name="other-num" id="other-num" value="1" />
       </div>
-      <a href=""><i class="fas fa-plus-circle"></i></a><br />
+      <a onclick="addOther()"><i class="fas fa-plus-circle"></i></a>
+      <a onclick="removeOther()"><i class="fas fa-minus-circle"></i></a>
+      <br />
     </div>
     <!-- INSTRUCTIONS -->
     <div class="form-group">
@@ -196,5 +188,10 @@ content %}
     />
   </form>
 </div>
+
+<script
+  src="{{ url_for('static', filename='js/create_recipe_script.js')}}"
+  charset="utf-8"
+></script>
 
 {% endblock %}

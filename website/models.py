@@ -93,8 +93,9 @@ class Recipe:
         return update_recipe(recipe_id, self.recipe_tuple())
 
     def delete(self):
-        #to be completed
-        return 1
+        #Deletes the recipe from the database. Also deletes all ingredients
+        #Linked to this recipe
+        return delete_from_db("recipe", "id", self.get_id())
 
 class Grain:
     def __init__(self, recipe_type, recipe_id, grain_name, quantity):
@@ -270,6 +271,21 @@ def get_from_db(table_name, column_name="", column_value=""):
         return e
 
     return rows
+
+
+def delete_from_db(table_name, column_name="", column_value=""):
+    ### delete an item from the db
+    # ---------
+    # - param table_name (string): Name of the table
+    # - param column_name (string): Search parameter
+    # - param column_value: Search value
+    # ---------
+    # return 1 if successful
+    ###
+    sql_delete = "DELETE FROM " + table_name + " WHERE " + column_name + " = ?"
+
+    return _writetodb(sql_delete, (column_value,))
+
 
 def create_recipe(values):
     ### Add a new recipe in the recipe table
@@ -476,17 +492,7 @@ def update_ingredient(ingredient_type, ingredient_id, values):
     
     return _writetodb(sql_update, values)
 
-def delete_from_db(table_name, item_id):
-    ### delete an item from the db
-    # ---------
-    # - param: table_name (string)
-    # - param: item_id (tuple or list of tuples): (id,)
-    # ---------
-    # return 1 if successful
-    ###
-    sql_delete = "DELETE FROM " + table_name + " WHERE id = ?"
 
-    return _writetodb(sql_delete, item_id)
 
 
 
