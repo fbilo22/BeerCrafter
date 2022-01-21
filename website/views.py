@@ -64,6 +64,14 @@ def create_recipe_view():
             # TO BE COMPLETED - Add alert with error message
             return render_template("create-recipe.html")
 
+# Route to delete recipes
+# Deletes the recipe identified with the recipe_name argument
+# Calls the recipes_view to return to the recipes screen
+@views.route('/delete-recipe/<recipe_name>')
+def delete_recipe_view(recipe_name):
+    recipe = get_recipe(recipe_name)
+    recipe.delete()
+    return recipes_view()
 
 ### ---------------------------------------------------------------------------
 # Controller utility functions

@@ -12,6 +12,11 @@ content %}
     <i class="fas fa-eye"></i> See Sessions
   </a>
   <a href="#"> <i class="fas fa-plus-circle"></i> New Session </a>
+  <a
+    href="{{url_for('views.delete_recipe_view', recipe_name=recipe.recipe_name)}}"
+  >
+    <i class="fas fa-trash-alt"></i> Delete Recipe</a
+  >
 </div>
 <!-- Title -->
 <h2 id="title">{{recipe.recipe_name}}</h2>
