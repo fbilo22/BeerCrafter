@@ -85,9 +85,16 @@
             </li>
           </ul>
         </div>
+        <div>
+          <a
+            class="btn btn-outline-light btn-login"
+            href="{{ url_for('login')}}"
+            >Log In</a
+          >
+        </div>
       </div>
     </nav>
-
+    <!-- Content -->
     <div class="page-content">{% block content %} {% endblock %}</div>
     <!-- Footer -->
     <footer class="footer-container">
