@@ -105,6 +105,10 @@ a {
   margin: 50px auto;
 }
 
+.hidden {
+  display: none !important;
+}
+
 /****** CARD ******/
 
 .card {
