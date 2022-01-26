@@ -1,5 +1,12 @@
-from flask import Flask, url_for
+from flask import Flask
 from decouple import config
+
+from os import environ as env
+from werkzeug.exceptions import HTTPException
+
+from authlib.integrations.flask_client import OAuth
+from urllib.parse import urlencode
+
 
 def create_app():
     app = Flask(__name__)
@@ -7,9 +14,9 @@ def create_app():
     app.config['SECRET_KEY'] = config('flask_secret_key', default='')
 
     from .views import views
-    #from .auth import auth
+    from .auth import auth
 
     app.register_blueprint(views, url_prefix = '/')
-    #app.register_blueprint(auth, url_prefix = '/auth/')
+    app.register_blueprint(auth, url_prefix = '/auth/')
 
     return app

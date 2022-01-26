@@ -186,6 +186,12 @@ a.footer-link {
   padding-right: 16px;
 }
 
+#useravatar {
+  vertical-align: middle;
+  width: 40px;
+  height: 40px;
+}
+
 /****** FROMS & INPUTS ******/
 .form-group {
   margin: 32px auto;

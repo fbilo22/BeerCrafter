@@ -1,11 +1,14 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, session, redirect
+
+from flask.helpers import url_for
 from .models import Recipe, Grain, Hop, Yeast, Other, Note, get_all_recipes, get_recipe
+from .auth import login, login_required
 
 views = Blueprint('views', __name__)
 
 @views.route('/')
 def home():
-    return render_template("home.html")
+    return render_template("home.html", session = session)
 
 @views.route('/recipes')
 def recipes_view():
@@ -50,6 +53,7 @@ def edit_recipe_view(recipe_name):
             return render_template("edit-recipe.html")
 
 @views.route('/create-recipe', methods=('GET', 'POST'))
+@login_required
 def create_recipe_view():
     if request.method == 'GET':
         return render_template("create-recipe.html")

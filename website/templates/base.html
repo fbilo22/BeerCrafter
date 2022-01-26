@@ -85,13 +85,35 @@
             </li>
           </ul>
         </div>
+        {% if 'profile' not in session %}
         <div>
           <a
             class="btn btn-outline-light btn-login"
-            href="{{ url_for('login')}}"
+            href="{{ url_for('auth.login')}}"
             >Log In</a
           >
         </div>
+        {% else %}
+        <div>
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item avatar">
+              <img
+                id="useravatar"
+                class="rounded-circle"
+                src="{{session['profile']['picture']}}"
+                alt="avatar"
+              />
+            </li>
+          </ul>
+        </div>
+        <div>
+          <a
+            class="btn btn-outline-light btn-login"
+            href="{{ url_for('auth.logout')}}"
+            >Log Out</a
+          >
+        </div>
+        {% endif %}
       </div>
     </nav>
     <!-- Content -->
