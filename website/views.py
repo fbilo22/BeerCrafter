@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, session, redirect
 
 from flask.helpers import url_for
-from .models import Recipe, Grain, Hop, Yeast, Other, Note, get_all_recipes, get_recipe
+from .models import *
 from .auth import login, login_required
 
 views = Blueprint('views', __name__)
@@ -10,6 +10,7 @@ views = Blueprint('views', __name__)
 def home():
     return render_template("home.html", session = session)
 
+#------------------------------- Recipe Views ---------------------------------
 @views.route('/recipes')
 def recipes_view():
     #Extract all recipes in the database
@@ -17,20 +18,30 @@ def recipes_view():
     #Render the template to display all recipes from the list
     return render_template("recipes.html", recipes_list = recipes_list)
 
-@views.route('/sessions')
-def sessions_view():
-    return render_template("sessions.html")
-
 @views.route('/recipe-page/<recipe_name>')
 def recipe_page_view(recipe_name):
     recipe = get_recipe(recipe_name)
     return render_template("recipe-page.html", recipe=recipe)
 
-@views.route('/session-page')
-def session_page_view():
-    return render_template("session-page.html")
+
+@views.route('/create-recipe', methods=('GET', 'POST'))
+@login_required
+def create_recipe_view():
+    if request.method == 'GET':
+        return render_template("create-recipe.html")
+    
+    if request.method == 'POST':
+        # All items from the form are returned in a dict
+        r = request.form
+        # if operation is successful, display the new recipe view
+        if create_recipe_from_form(r):
+            return recipe_page_view(r['recipe_name'])
+        else:  
+            # TO BE COMPLETED - Add alert with error message
+            return render_template("create-recipe.html")
 
 @views.route('/edit-recipe/<recipe_name>', methods=('GET', 'POST'))
+@login_required
 def edit_recipe_view(recipe_name):
     if request.method == 'GET':
         recipe = get_recipe(recipe_name)
@@ -52,30 +63,75 @@ def edit_recipe_view(recipe_name):
             # TO BE COMPLETED - Add alert with error message
             return render_template("edit-recipe.html")
 
-@views.route('/create-recipe', methods=('GET', 'POST'))
+@views.route('/delete-recipe/<recipe_name>')
 @login_required
-def create_recipe_view():
+def delete_recipe_view(recipe_name):
+    # Route to delete a recipe
+    # Deletes the recipe identified with the recipe_name argument
+    # Calls the recipes_view to return to the recipes screen
+    recipe = get_recipe(recipe_name)
+    recipe.delete()
+    return recipes_view()
+
+#-------------------------- Brew Session Views --------------------------------
+@views.route('/brew_sessions', defaults={'recipe_name': ""})
+@views.route('/brew_sessions/<recipe_name>')
+def sessions_view(recipe_name=""):
+    #The recipe_name parameter is optional. If entered, the view will only
+    #show the sessions from the recipe with recipe_name
+    brew_sessions_list = get_brew_sessions_list(recipe_name)
+    return render_template("sessions.html", brew_sessions_list=brew_sessions_list,
+        recipe_name=recipe_name)
+
+@views.route('/session-page/<recipe_name>/<brewsession_id>')
+def session_page_view(recipe_name, brewsession_id):
+    brew_session = get_brew_session(brewsession_id)
+    brew_session.rating = int(brew_session.rating)
+    return render_template("session-page.html", brew_session = brew_session,
+        recipe_name = recipe_name)
+
+@views.route('/create-brewsession/<recipe_name>', methods=('GET', 'POST'))
+@login_required
+def create_brewsession_view(recipe_name):
+    recipe = get_recipe(recipe_name)
     if request.method == 'GET':
-        return render_template("create-recipe.html")
+        return render_template("create-brewsession.html", recipe = recipe)
     
     if request.method == 'POST':
         # All items from the form are returned in a dict
         r = request.form
         # if operation is successful, display the new recipe view
-        if create_recipe_from_form(r):
-            return recipe_page_view(r['recipe_name'])
-        else:  
-            # TO BE COMPLETED - Add alert with error message
-            return render_template("create-recipe.html")
+        new_brewsession_id = create_brewsession_from_form(r, recipe.get_id())
+        
+        return session_page_view(recipe_name, new_brewsession_id)
 
-# Route to delete recipes
-# Deletes the recipe identified with the recipe_name argument
-# Calls the recipes_view to return to the recipes screen
-@views.route('/delete-recipe/<recipe_name>')
-def delete_recipe_view(recipe_name):
-    recipe = get_recipe(recipe_name)
-    recipe.delete()
-    return recipes_view()
+@views.route('/edit-brewsession/<brewsession_id>', methods=('GET', 'POST'))
+@login_required
+def edit_brewsession_view(brewsession_id):
+    brew_session = get_brew_session(brewsession_id)
+    if request.method == 'GET':
+        return render_template("edit-brewsession.html", brew=brew_session)
+    
+    if request.method == 'POST':
+        # Get the brew session source recipe
+        recipe = get_recipe(brew_session.get_recipe_name())
+        # All items from the form are returned in a dict
+        r = request.form
+        # To edit the brew_session, we will simply delete and re-create it
+        brew_session.delete()
+        new_brewsession_id = create_brewsession_from_form(r, recipe.get_id())
+        
+        return session_page_view(recipe.recipe_name, new_brewsession_id)
+
+@views.route('/delete-brewsession/<brewsession_id>')
+@login_required
+def delete_brewsession_view(brewsession_id):
+    # Route to delete a recipe
+    # Deletes the recipe identified with the recipe_name argument
+    # Calls the recipes_view to return to the recipes screen
+    brew_session = get_brew_session(brewsession_id)
+    brew_session.delete()
+    return sessions_view()
 
 ### ---------------------------------------------------------------------------
 # Controller utility functions
@@ -119,3 +175,48 @@ def create_recipe_from_form(r):
         new_instructions.create() 
         
         return 1
+
+def create_brewsession_from_form(r, recipe_id):
+    ### function to create a new brew session and it's ingredients from a form
+    # - param r: user entered form to create or edit brew session
+    # - param recipe_id: Recipe ID for the recipe used as brew session source
+    ### returns the new brew session id
+
+        # Calculate the ABV from OG and FG
+        calc_ABV = round((float(r['grav_og']) - float(r['grav_fn']))*131.25, 2)
+
+        # Create the recipe in the database
+        new_brewsession = BrewSession(recipe_id, r['beer_style'], 
+            r['mash_time'], r['mash_temp'], r['IBU'], calc_ABV, r['grav_og'],
+            r['grav_fn'], r['brew_date'], r['rating'])
+        new_brewsession.create()
+        
+        # Get the new recipe ID to create ingredients and instructions
+        # Create ingredients
+        new_brewsession.id = get_lastID_fromdbtable("brew_session")
+        # Grains:
+        for i in range(int(r['grains-num'])):
+            keys = ['grain' + str(i+1), 'grain' + str(i+1) + '-qty']
+            new_grain = Grain('session', new_brewsession.id, r[keys[0]], r[keys[1]])
+            new_grain.create()
+        # Hops:
+        for i in range(int(r['hops-num'])):
+            keys = ['hops' + str(i+1), 'hops' + str(i+1) + '-qty',
+                'hops' + str(i+1) + '-use', 'hops' + str(i+1) + '-time']
+            new_hop = Hop('session', new_brewsession.id, r[keys[0]], r[keys[1]],
+                r[keys[2]], r[keys[3]])
+            new_hop.create()
+        # Yeast:
+        new_yeast = Yeast('session', new_brewsession.id, r['yeast'])
+        new_yeast.create()
+        # Other Ingredients:
+        for i in range(int(r['other-num'])):
+            keys = ['other' + str(i+1), 'other' + str(i+1) + '-qty',
+                'other' + str(i+1) + '-details']
+            new_other = Other('session', new_brewsession.id, r[keys[0]], r[keys[1]], r[keys[2]])
+            new_other.create()
+        # Instructions
+        new_instructions = Note('session', new_brewsession.id, r['instructions'])
+        new_instructions.create() 
+        
+        return new_brewsession.id

@@ -2,8 +2,11 @@
 content %}
 
 <!-- Title -->
-<h2 id="title">Sessions</h2>
-
+{% if recipe_name %}
+<h2 id="title">Sessions for {{recipe_name}}</h2>
+{% else %}
+<h2 id="title">All Sessions</h2>
+{% endif %}
 <!-- Filter container -->
 <div class="container">
   <div class="row filter-row">
@@ -32,8 +35,13 @@ content %}
 <!-- Main Container - Displays all instances of available recipes/sessions -->
 <div class="container">
   <div class="row g-3 recipe-row">
+    <!-- Create a new session. Only displayed if looking at sessions for
+    a specific recipe -->
+    {% if recipe_name %}
     <div class="col-6 col-lg-3">
-      <a href="">
+      <a
+        href="{{url_for('views.create_brewsession_view', recipe_name=recipe_name)}}"
+      >
         <div class="card home-card recipe-card">
           <div class="card-body">
             <h4>
@@ -49,8 +57,11 @@ content %}
         </div>
       </a>
     </div>
-    <div class="col-6 col-lg-3">
-      <a href="{{url_for('views.session_page_view')}}">
+    {% endif %} {% for brew in brew_sessions_list %}
+    <div class="col-8 col-lg-4">
+      <a
+        href="{{url_for('views.session_page_view', recipe_name=brew.get_recipe_name(), brewsession_id=brew.id)}}"
+      >
         <div class="card session-card recipe-card">
           <img
             class="card-img-top session-card-img"
@@ -58,35 +69,18 @@ content %}
             alt="session-img"
           />
           <div class="card-body">
-            <h5 class="card-title">Recipe Name</h5>
-            <h5 class="card-title">Date</h5>
-            <p class="card-text">Rating: 4.5⭐</p>
+            <h5 class="card-title">{{brew.get_recipe_name()}}</h5>
+            <h5 class="card-title">{{brew.brew_date}}</h5>
+            <br />
+            <div class="card-rating">
+              <h5 class="card-title">Rating:</h5>
+              <h5 class="card-title">{{brew.rating}}/5</h5>
+            </div>
           </div>
         </div>
       </a>
     </div>
-    <div class="col-6 col-lg-3">
-      <a href="">
-        <div class="card recipe-card">
-          <img class="card-img-top" src="" alt="session-img" />
-          <div class="card-body">
-            <h5 class="card-title">Session Name</h5>
-            <p class="card-text">Session Description</p>
-          </div>
-        </div>
-      </a>
-    </div>
-    <div class="col-6 col-lg-3">
-      <a href="">
-        <div class="card recipe-card">
-          <img class="card-img-top" src="" alt="session-img" />
-          <div class="card-body">
-            <h5 class="card-title">Session Name</h5>
-            <p class="card-text">Session Description</p>
-          </div>
-        </div>
-      </a>
-    </div>
+    {% endfor %}
   </div>
 </div>
 

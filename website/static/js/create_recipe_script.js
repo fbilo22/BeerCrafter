@@ -90,6 +90,8 @@ function removeGrain() {
     elem.parentNode.removeChild(elem);
     // Decrement numberOfGrains
     numberOfGrains--;
+    //Update the number of grains in the form's hidden input
+    document.getElementById("grains-num").setAttribute("value", numberOfGrains);
   }
 }
 
@@ -101,6 +103,8 @@ function removeHop() {
     elem.parentNode.removeChild(elem);
     // Decrement numberOfGrains
     numberOfHops--;
+    //Update the number of hops in the form's hidden input
+    document.getElementById("hops-num").setAttribute("value", numberOfHops);
   }
 }
 
@@ -112,5 +116,7 @@ function removeOther() {
     elem.parentNode.removeChild(elem);
     // Decrement numberOfGrains
     numberOfOther--;
+    //Update the number of other ingredients in the form's hidden input
+    document.getElementById("other-num").setAttribute("value", numberOfOther);
   }
 }

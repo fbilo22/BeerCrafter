@@ -3,10 +3,16 @@
   
   <!-- Sessions header -->
   <div class="recipe-header">
-    <a href="#"> <i class="fas fa-edit"></i> Edit Session</a>
+    <a href="{{url_for('views.edit_brewsession_view', brewsession_id=brew_session.id)}}"> <i class="fas fa-edit"></i> Edit Session</a>
+    <a
+    href="{{url_for('views.delete_brewsession_view', brewsession_id=brew_session.id)}}"
+  >
+    <i class="fas fa-trash-alt"></i> Delete Session</a
+  >
   </div>
+
   <!-- Title -->
-  <h2 id="title">Session Name</h2>
+  <h2 id="title">{{recipe_name}} Session {{brew_session.id}}</h2>
   
   <!-- Main Content -->
   <section>
@@ -14,11 +20,11 @@
       <div class="row">
         <div class="col-6 general-col">
           <h4>Recipe Name</h4>
-          <p class="variable">Nelson's Pale Ale</p>
+          <p class="variable">{{recipe_name}}</p>
         </div>
         <div class="col-6 general-col">
           <h4>Brewing Date</h4>
-          <p class="variable">2021-08-21</p>
+          <p class="variable">{{brew_session.brew_date}}</p>
         </div>
       </div>
     </div>
@@ -27,18 +33,22 @@
         <div class="row mt-3">
           <div class="col-4 general-col">
             <h4>Beer Style</h4>
-            <p class="variable">Pale Ale</p>
+            <p class="variable">{{brew_session.beer_style}}</p>
+            <h4>IBU</h4>
+          <p class="variable">{{brew_session.IBU}}</p>
           </div>
           <div class="col-4 general-col">
             <h4>Mash Time</h4>
-            <p><span class="variable">60</span> min</p>
+            <p><span class="variable">{{brew_session.mash_time}}</span> min</p>
+            <h4>Mash Temp</h4>
+            <p><span class="variable">{{brew_session.mash_temp}}</span> °F</p>
           </div>
           <div class="col-4 general-col">
             <h4>ABV</h4>
-            <p><span class="variable">5.5</span> %</p>
+            <p><span class="variable">{{brew_session.abv}}</span> %</p>
             <p>
-              OG: <span class="variable"> 1.050</span> <br />FG:
-              <span class="variable"> 1.019</span>
+              OG: <span class="variable"> {{brew_session.grav_og}}</span> <br />FG:
+              <span class="variable"> {{brew_session.grav_fn}}</span>
             </p>
           </div>
         </div>
@@ -55,13 +65,15 @@
               <h4>Grains</h4>
             </div>
             <div class="card-body">
+              {% for grain in brew_session.get_grains() %}
               <div class="ingredient">
                 <img class="ingredient-img" src="{{url_for('static', filename=
                 'images/wheat.png')}}" alt="grain-img">
-                <p><span class="variable">Pilsner Malt</span><span class="qty"> 
-                  <span class="variable">1.5</span> kg</span>
+                <p><span class="variable">{{grain.grain_name}}</span><span class="qty"> 
+                  <span class="variable">{{grain.quantity}}</span> kg</span>
                 </p>
               </div>
+              {% endfor %}
             </div>
           </div>
         </div>
@@ -70,11 +82,11 @@
             <h4>Yeast</h4>
           </div>
           <div class="card-body">
+            {% for yeast in brew_session.get_yeast()%}
             <div class="ingredient">
-              <p class="variable">Omega OYL-011
-              </p>
+              <p class="variable">{{yeast.yeast_name}}</p>
             </div>
-            
+            {% endfor %}
           </div>
         </div></div>
       </div>
@@ -85,24 +97,29 @@
               <h4>Hops</h4>
             </div>
             <div class="card-body">
+              {% for hop in brew_session.get_hops() %}
               <div class="ingredient">
-                <img class="ingredient-img" src="{{url_for('static', filename=
-                'images/hop.png')}}" alt="hop-img">
-                <p><span class="variable">Cascade</span><span class="qty"> 
-                  <span class="variable">0.5</span> oz</span>
-                <p><span class="variable use-method">Boil</span><span class="qty"> 
-                  <span class="variable">5</span> min</span>
+                <img
+                  class="ingredient-img"
+                  src="{{url_for('static', filename=
+                'images/hop.png')}}"
+                  alt="hop-img"
+                />
+                <p>
+                  <span class="variable">{{hop.hop_name}}</span
+                  ><span class="qty">
+                    <span class="variable">{{hop.quantity}}</span> oz</span
+                  >
+                </p>
+  
+                <p>
+                  <span class="variable use-method">{{hop.use_type}}</span
+                  ><span class="qty">
+                    <span class="variable">{{hop.use_time}}</span> min/days</span
+                  >
                 </p>
               </div>
-              <div class="ingredient">
-                <img class="ingredient-img" src="{{url_for('static', filename=
-                'images/hop.png')}}" alt="hop-img">
-                <p><span class="variable">Nelson Sauvin</span><span class="qty"> 
-                  <span class="variable">2</span> oz</span>
-                <p><span class="variable use-method">Whirlpool</span><span class="qty"> 
-                  <span class="variable">15</span> min</span>
-                </p>
-              </div>
+              {% endfor %}
             </div>
         </div>
         </div>
@@ -112,12 +129,21 @@
               <h4>Other</h4>
             </div>
             <div class="card-body">
+              {% for other in brew_session.get_other() %}
               <div class="ingredient">
-                <p><span class="variable">Secret Ingredient</span><span class="qty"> 
-                  <span class="variable">0.1</span> kg</span>
-                <p>Details: <span class="variable use-method">Add 5 min into the boil </span>
+                <p>
+                  <span class="variable">{{other.ing_name}}</span
+                  ><span class="qty">
+                    <span class="variable">{{other.quantity}}</span> kg</span
+                  >
+                </p>
+  
+                <p>
+                  Details:
+                  <span class="variable use-method">{{other.details}} </span>
                 </p>
               </div>
+              {% endfor %}
             </div>
         </div>
     </div>
@@ -126,21 +152,22 @@
   <section>
     <h4 class="title-instructions">Rating</h4>
     <div class="container-fluid general-col">
+      {% for y in range(brew_session.rating) %}
       <i class="fas fa-star rating-star"></i>
-      <i class="fas fa-star rating-star"></i>
-      <i class="fas fa-star rating-star"></i>
-      <i class="fas fa-star rating-star"></i>
+      {% endfor %}
+      {% for y in range(5-brew_session.rating) %}
       <i class="far fa-star rating-star"></i>
+      {% endfor %}
     </div>
-    
   </section>
 
   <section>
     <h4 class="title-instructions">Notes</h4>
-    <div class="container-fluid">
-      <p class="variable">Session Notes</p>
-    </div>
-    
+    {% for note in brew_session.get_note() %}
+  <div class="container-fluid">
+    <pre class="variable">{{note.note}}</pre>
+  </div>
+  {% endfor %}
   </section>
   
   {% endblock %}
