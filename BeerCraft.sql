@@ -24,7 +24,7 @@ CREATE TABLE  brew_session  (
    grav_og  real,
    grav_fn  real,
    brew_date  integer,
-   rating  real,
+   rating  integer,
    picture_id  text,
    FOREIGN KEY (recipe_id) REFERENCES recipe (id)
     ON DELETE CASCADE
