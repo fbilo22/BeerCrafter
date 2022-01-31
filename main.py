@@ -6,21 +6,14 @@ from functools import wraps
 import json
 from os import environ as env
 from werkzeug.exceptions import HTTPException
-
-from dotenv import load_dotenv, find_dotenv
-from flask import Flask
-from flask import jsonify
-from flask import redirect
-from flask import render_template
-from flask import session
-from flask import url_for
-from authlib.integrations.flask_client import OAuth
-from urllib.parse import urlencode
-
-from decouple import config
+from flask.wrappers import Response
 
 
 app = create_app()
+
+@app.errorhandler(401)
+def custom_401(error):
+    return Response('Requires Administrator role'), 401
 
 # # -----------------------------------------------------------------------------
 # # Auth0 implementation. Following their Flask guide

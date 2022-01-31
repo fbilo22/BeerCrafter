@@ -2,7 +2,7 @@ import os
 from flask import Blueprint, render_template, request, session, flash, redirect, current_app
 from flask.helpers import url_for
 from .models import *
-from .auth import login, login_required
+from .auth import admin_required, login, login_required
 from werkzeug.utils import secure_filename
 
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
@@ -44,6 +44,7 @@ def create_recipe_view():
 
 @views.route('/edit-recipe/<recipe_name>', methods=('GET', 'POST'))
 @login_required
+@admin_required
 def edit_recipe_view(recipe_name):
     if request.method == 'GET':
         recipe = get_recipe(recipe_name)
@@ -67,6 +68,7 @@ def edit_recipe_view(recipe_name):
 
 @views.route('/delete-recipe/<recipe_name>')
 @login_required
+@admin_required
 def delete_recipe_view(recipe_name):
     # Route to delete a recipe
     # Deletes the recipe identified with the recipe_name argument
@@ -109,6 +111,7 @@ def create_brewsession_view(recipe_name):
 
 @views.route('/edit-brewsession/<brewsession_id>', methods=('GET', 'POST'))
 @login_required
+@admin_required
 def edit_brewsession_view(brewsession_id):
     brew_session = get_brew_session(brewsession_id)
     if request.method == 'GET':
@@ -127,6 +130,7 @@ def edit_brewsession_view(brewsession_id):
 
 @views.route('/delete-brewsession/<brewsession_id>')
 @login_required
+@admin_required
 def delete_brewsession_view(brewsession_id):
     # Route to delete a recipe
     # Deletes the recipe identified with the recipe_name argument
@@ -137,6 +141,7 @@ def delete_brewsession_view(brewsession_id):
 
 @views.route('/upload-image/<recipe_name>/<brewsession_id>', methods=('GET', 'POST'))
 @login_required
+@admin_required
 def upload_image_view(recipe_name, brewsession_id):
     brew_session = get_brew_session(brewsession_id)
 

@@ -1,11 +1,16 @@
-from flask import Blueprint, current_app, render_template, request, session, redirect
-from flask.helpers import url_for
+from os import abort
+from flask import Blueprint, current_app, abort, session, redirect
+from flask.helpers import flash, url_for
 
 from decouple import config
 from functools import wraps
 
 from authlib.integrations.flask_client import OAuth
 from urllib.parse import urlencode
+
+from flask.wrappers import Response
+
+OAUTH_NAMESPACE = 'http://localhost:5000'
 
 auth = Blueprint('auth', __name__)
 
@@ -33,13 +38,13 @@ def callback_handling():
     auth0.authorize_access_token()
     resp = auth0.get('userinfo')
     userinfo = resp.json()
-
     # Store the user information in flask session.
     session['jwt_payload'] = userinfo
     session['profile'] = {
         'user_id': userinfo['sub'],
         'name': userinfo['name'],
-        'picture': userinfo['picture']
+        'picture': userinfo['picture'],
+        'roles': userinfo[OAUTH_NAMESPACE + '/roles']
     }
 
     return redirect(url_for('views.home', _external=True))
@@ -59,6 +64,10 @@ def logout():
     }
     return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
+
+### ---------------------------------------------------------------------------
+# auth functions
+
 def login_required(f):
     #Wrapper for views that can only by accessed by logged in users
     #If the user is not logged in, redirect to login view
@@ -66,6 +75,21 @@ def login_required(f):
     def wrapped_view(*args, **kwargs):
         if 'profile' not in session:
             return redirect(url_for('auth.login'))
+        return f(*args, **kwargs)
+    
+    return wrapped_view
+
+def admin_required(f):
+    #Wrapper for views that can only by accessed by logged in users
+    #With Administrator role
+    #If the user is not logged in, or not an admin, redirect to login view
+    @wraps(f)
+    def wrapped_view(*args, **kwargs):
+        if 'profile' not in session:
+            return redirect(url_for('auth.login'))
+        elif 'Administrator' not in session['profile']['roles']:
+            abort(401)
+        
         return f(*args, **kwargs)
     
     return wrapped_view
