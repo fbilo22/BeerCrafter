@@ -2,7 +2,7 @@ import os
 from flask import Blueprint, render_template, request, session, flash, redirect, current_app
 from flask.helpers import url_for
 from .models import *
-from .auth import admin_required, login, login_required
+from .auth import admin_required, login_required
 from werkzeug.utils import secure_filename
 
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
@@ -35,12 +35,11 @@ def create_recipe_view():
     if request.method == 'POST':
         # All items from the form are returned in a dict
         r = request.form
-        # if operation is successful, display the new recipe view
-        if create_recipe_from_form(r):
-            return recipe_page_view(r['recipe_name'])
-        else:  
-            # TO BE COMPLETED - Add alert with error message
-            return render_template("create-recipe.html")
+        # Create the recipe from the form inputs.
+        create_recipe_from_form(r)
+        # Redirect to the new recipe page
+        return redirect(url_for('views.recipe_page_view', 
+            recipe_name = r['recipe_name']))
 
 @views.route('/edit-recipe/<recipe_name>', methods=('GET', 'POST'))
 @login_required
@@ -58,13 +57,11 @@ def edit_recipe_view(recipe_name):
         recipe.delete()
         # Get the form
         r = request.form
-        # Create the recipe from the form data
-        # if operation is successful, display the updated_recipe view
-        if create_recipe_from_form(r):
-            return recipe_page_view(r['recipe_name'])
-        else:  
-            # TO BE COMPLETED - Add alert with error message
-            return render_template("edit-recipe.html")
+        # Create the recipe from the form inputs
+        create_recipe_from_form(r)
+        # Redirect to the edited recipe page
+        return redirect(url_for('views.recipe_page_view', 
+            recipe_name = r['recipe_name']))
 
 @views.route('/delete-recipe/<recipe_name>')
 @login_required
@@ -75,7 +72,7 @@ def delete_recipe_view(recipe_name):
     # Calls the recipes_view to return to the recipes screen
     recipe = get_recipe(recipe_name)
     recipe.delete()
-    return recipes_view()
+    return redirect(url_for('views.recipes_view'))
 
 #-------------------------- Brew Session Views --------------------------------
 @views.route('/brew_sessions', defaults={'recipe_name': ""})
@@ -104,10 +101,11 @@ def create_brewsession_view(recipe_name):
     if request.method == 'POST':
         # All items from the form are returned in a dict
         r = request.form
-        # if operation is successful, display the new recipe view
+        # Create a new brew session from the form inputs
         new_brewsession_id = create_brewsession_from_form(r, recipe.get_id())
-        
-        return session_page_view(recipe_name, new_brewsession_id)
+        # Redirect to the new brew session page
+        return redirect(url_for('views.session_page_view',
+            recipe_name=recipe_name, brewsession_id=new_brewsession_id))
 
 @views.route('/edit-brewsession/<brewsession_id>', methods=('GET', 'POST'))
 @login_required
@@ -125,19 +123,20 @@ def edit_brewsession_view(brewsession_id):
         # To edit the brew_session, we will simply delete and re-create it
         brew_session.delete()
         new_brewsession_id = create_brewsession_from_form(r, recipe.get_id())
-        
-        return session_page_view(recipe.recipe_name, new_brewsession_id)
+        # Redirect to the edited brew session page
+        return redirect(url_for('views.session_page_view',
+            recipe_name=recipe.recipe_name, brewsession_id=new_brewsession_id))
 
 @views.route('/delete-brewsession/<brewsession_id>')
 @login_required
 @admin_required
 def delete_brewsession_view(brewsession_id):
-    # Route to delete a recipe
-    # Deletes the recipe identified with the recipe_name argument
-    # Calls the recipes_view to return to the recipes screen
+    # Route to delete a brew session
+    # Deletes the brew session where id = brewsession_id argument
+    # Redirects to the sessions view page
     brew_session = get_brew_session(brewsession_id)
     brew_session.delete()
-    return sessions_view()
+    return redirect(url_for('views.sessions_view'))
 
 @views.route('/upload-image/<recipe_name>/<brewsession_id>', methods=('GET', 'POST'))
 @login_required
