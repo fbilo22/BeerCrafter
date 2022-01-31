@@ -1,0 +1,15 @@
+{% extends "base.html" %} {% block title %}BeerCraft{% endblock %} {% block
+content %}
+
+<!-- Title -->
+<h2 id="title">Upload Brew Session Image</h2>
+
+<!-- Main Content -->
+<h5>Max size 1mb</h5>
+<div class="container-fluid p-2">
+  <form method="POST" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <input type="submit" value="Upload" />
+  </form>
+</div>
+{% endblock %}

@@ -7,7 +7,6 @@ from functools import wraps
 from authlib.integrations.flask_client import OAuth
 from urllib.parse import urlencode
 
-
 auth = Blueprint('auth', __name__)
 
 # Auth0 implementation following their Flask guide
@@ -42,6 +41,7 @@ def callback_handling():
         'name': userinfo['name'],
         'picture': userinfo['picture']
     }
+
     return redirect(url_for('views.home', _external=True))
 
 @auth.route('/login')

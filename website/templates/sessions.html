@@ -63,11 +63,19 @@ content %}
         href="{{url_for('views.session_page_view', recipe_name=brew.get_recipe_name(), brewsession_id=brew.id)}}"
       >
         <div class="card session-card recipe-card">
+          {% if brew.get_picture_ref() %}
           <img
             class="card-img-top session-card-img"
-            src="{{ url_for('static', filename='images/neipa_example.jpg')}}"
+            src="{{ url_for('static', filename='images/user_images/' + brew.get_picture_ref())}}"
             alt="session-img"
           />
+          {% else %}
+          <img
+            class="card-img-top session-card-img"
+            src="{{ url_for('static', filename='images/default_session_img.png')}}"
+            alt="session-img"
+          />
+          {% endif %}
           <div class="card-body">
             <h5 class="card-title">{{brew.get_recipe_name()}}</h5>
             <h5 class="card-title">{{brew.brew_date}}</h5>

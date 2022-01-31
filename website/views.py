@@ -1,8 +1,11 @@
-from flask import Blueprint, render_template, request, session, redirect
-
+import os
+from flask import Blueprint, render_template, request, session, flash, redirect, current_app
 from flask.helpers import url_for
 from .models import *
 from .auth import login, login_required
+from werkzeug.utils import secure_filename
+
+ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
 
 views = Blueprint('views', __name__)
 
@@ -22,7 +25,6 @@ def recipes_view():
 def recipe_page_view(recipe_name):
     recipe = get_recipe(recipe_name)
     return render_template("recipe-page.html", recipe=recipe)
-
 
 @views.route('/create-recipe', methods=('GET', 'POST'))
 @login_required
@@ -86,9 +88,9 @@ def sessions_view(recipe_name=""):
 @views.route('/session-page/<recipe_name>/<brewsession_id>')
 def session_page_view(recipe_name, brewsession_id):
     brew_session = get_brew_session(brewsession_id)
-    brew_session.rating = int(brew_session.rating)
+    picture_id = brew_session.get_picture_ref()
     return render_template("session-page.html", brew_session = brew_session,
-        recipe_name = recipe_name)
+        recipe_name = recipe_name, picture_id = picture_id)
 
 @views.route('/create-brewsession/<recipe_name>', methods=('GET', 'POST'))
 @login_required
@@ -132,6 +134,39 @@ def delete_brewsession_view(brewsession_id):
     brew_session = get_brew_session(brewsession_id)
     brew_session.delete()
     return sessions_view()
+
+@views.route('/upload-image/<recipe_name>/<brewsession_id>', methods=('GET', 'POST'))
+@login_required
+def upload_image_view(recipe_name, brewsession_id):
+    brew_session = get_brew_session(brewsession_id)
+
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            # Rename the file with recipe_name + brewsession_id 
+            file_ext = file.filename.rsplit('.', 1)[1].lower()
+            filename = secure_filename(recipe_name + str(brewsession_id) + '.'
+                + file_ext)
+            # Save the picture to the UPLOAD FOLDER specified in the init file
+            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'],
+                filename))
+            #Write the filename to the db for easier access
+            brew_session.add_picture_ref(filename)
+
+            return redirect(url_for('views.session_page_view',
+                recipe_name=recipe_name, brewsession_id = brewsession_id))
+
+    return render_template("upload_brewsession_image.html",
+        recipe_name = recipe_name, brewsession_id = brewsession_id)
 
 ### ---------------------------------------------------------------------------
 # Controller utility functions
@@ -220,3 +255,8 @@ def create_brewsession_from_form(r, recipe_id):
         new_instructions.create() 
         
         return new_brewsession.id
+
+def allowed_file(filename):
+    # From the flask documentation
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

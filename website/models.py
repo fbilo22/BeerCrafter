@@ -123,6 +123,19 @@ class BrewSession:
     #def get_id(self):
     #    return get_from_db("brew_session", "brew_date", self.brew_date)[0][0]
 
+    def add_picture_ref(self, filename):
+        # Method to save a filename in the picture_id column
+        return add_pic_to_brewsession(self.id, filename)
+
+    def get_picture_ref(self):
+        # Method to check if there is a picture for this brew session
+        # Returns the picture filename or FALSE if there are none
+        recipe_id = get_from_db("brew_session", "id", self.id)[0][11]
+        if not recipe_id:
+            return False
+
+        return recipe_id
+
     def get_recipe_name(self):
         return get_from_db("recipe", "id", self.recipe_id)[0][1]
 
@@ -569,6 +582,17 @@ def update_brewsession(session_id, values):
 
     return _writetodb(sql_update, values)
 
+def add_pic_to_brewsession(session_id, picture_id):
+    ### Add a picture filename to the picture_id column of a brewsession
+    # ---------
+    # - param: session_id - integer: id of the recipe to be updated
+    # - param: picture_id - string: filename of picture
+    # ---------
+    sql = """UPDATE brew_session
+             SET picture_id = ? 
+             WHERE id = """ + str(session_id)
+    
+    return _writetodb(sql, (picture_id,))
 
 def update_ingredient(ingredient_type, ingredient_id, values):
     ### Update one or more ingredients

@@ -3,6 +3,7 @@
   
   <!-- Sessions header -->
   <div class="recipe-header">
+    <a href="{{url_for('views.upload_image_view', recipe_name = recipe_name, brewsession_id=brew_session.id)}}"> <i class="fas fa-image"></i> Add Picture</a>
     <a href="{{url_for('views.edit_brewsession_view', brewsession_id=brew_session.id)}}"> <i class="fas fa-edit"></i> Edit Session</a>
     <a
     href="{{url_for('views.delete_brewsession_view', brewsession_id=brew_session.id)}}"
@@ -160,6 +161,15 @@
       {% endfor %}
     </div>
   </section>
+
+  <section>
+  {% if picture_id %}
+    <h4 class="title-instructions">Picture</h4>
+  <div class="container-fluid general-col">
+    <img class="user-picture" src="{{ url_for('static', filename='images/user_images/' + picture_id)}}" alt="user-picture">
+  </div>
+  </section>
+  {% endif %}
 
   <section>
     <h4 class="title-instructions">Notes</h4>
