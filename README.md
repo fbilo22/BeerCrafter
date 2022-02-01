@@ -80,6 +80,10 @@ Only logged-in user will be able to create recipes and brew-sessions, and only u
 
 All users, event logged out ones, will be able to see every recipes and brew-sessions
 
+## Deployment
+
+App is deployed using the free hosting option from Heroku
+
 ## To be implemented and improvements <a name="Improvements"></a>
 
 - Create and Edit forms are very bare-bone. They could be stylized with CSS
