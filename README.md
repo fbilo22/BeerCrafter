@@ -29,7 +29,10 @@ You can also reach out if you have constructive comments and suggestions
 
 The database is used to store recipes, brew sessions, ingredients and instructions/notes.
 
-Since the requirements are very simple, I used the SQLite database
+Since the requirements are very simple, I used the SQLite database.
+
+In retrospect, using something like postgresSQL would have been a better idea. SQLite does not support concurent connections, which makes it non-optimal for production use.
+It is also not supported by platforms like Heroku.
 
 Database diagram:
 ![image](SQLite_Tables_diagram.png)
@@ -91,3 +94,4 @@ App is deployed on PythonAnywhere.com
 - Create and Edit forms are very bare-bone. They could be stylized with CSS
 - Home page Create new session is not functional: Currently, the user can creatre a brew session from a recipe page or from the screen to browse existing sessions from a recipe. To make this functional, I will need to implement a way for the user to select a recipe and generate the create session page from the selected recipe.
 - Mobile navbar: The navbar on mobile does not display the items as intended. Could be improved to look better.
+- Filter and search functions on the recipes and sessions pages have not been implemented yet.
