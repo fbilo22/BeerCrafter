@@ -64,8 +64,10 @@ content %}
           />
           <div class="card-body">
             <h5 class="card-title">{{recipe.recipe_name}}</h5>
-            <p class="card-text">Beer Style</p>
-            <p class="card-text">ABV% <span class="card-rating">4.5⭐</span></p>
+            <p class="card-text">{{recipe.beer_style}}</p>
+            <p class="card-text">
+              ABV% <span class="card-rating">{{recipe.abv}}</span>
+            </p>
           </div>
         </div>
       </a>
