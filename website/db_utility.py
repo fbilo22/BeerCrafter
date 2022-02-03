@@ -1,4 +1,3 @@
-
 import sqlite3 as db
 
 ### -----------------------------------------
@@ -93,24 +92,24 @@ def get_from_db(table_name, column_name="", column_value=""):
 
     return rows
 
-def get_lastID_fromdbtable(table_name):
-    sql = "SELECT MAX(rowid) FROM " + table_name
+# def get_lastID_fromdbtable(table_name):
+#     sql = "SELECT MAX(rowid) FROM " + table_name
 
-    try:
-        # Connect to the DB
-        con = db.connect(DBNAME)
-        cur = con.cursor()
-        #execute the query
-        cur.execute(sql)
-        #Store results in rows
-        rows = cur.fetchall()
-        #close connection
-        con.close()
+#     try:
+#         # Connect to the DB
+#         con = db.connect(DBNAME)
+#         cur = con.cursor()
+#         #execute the query
+#         cur.execute(sql)
+#         #Store results in rows
+#         rows = cur.fetchall()
+#         #close connection
+#         con.close()
 
-    except db.Error as e:
-        return e
+#     except db.Error as e:
+#         return e
 
-    return rows[0][0]
+#     return rows[0][0]
 
 
 def delete_from_db(table_name, column_name="", column_value=""):
