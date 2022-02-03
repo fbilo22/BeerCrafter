@@ -1,5 +1,7 @@
 # BeerCraft
 
+[BeerCraft Website](https://fbilo22.pythonanywhere.com)
+
 # Table of contents
 
 1. [Introduction](#Introduction)
@@ -82,7 +84,7 @@ All users, event logged out ones, will be able to see every recipes and brew-ses
 
 ## Deployment
 
-App is deployed using the free hosting option from Heroku
+App is deployed on PythonAnywhere.com
 
 ## To be implemented and improvements <a name="Improvements"></a>
 
