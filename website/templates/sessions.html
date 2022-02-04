@@ -58,7 +58,7 @@ content %}
       </a>
     </div>
     {% endif %} {% for brew in brew_sessions_list %}
-    <div class="col-8 col-lg-4">
+    <div class="col-12 col-md-6 col-lg-4">
       <a
         href="{{url_for('views.session_page_view', recipe_name=brew.get_recipe_name(), brewsession_id=brew.id)}}"
       >
