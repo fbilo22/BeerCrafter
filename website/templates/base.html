@@ -49,76 +49,80 @@
   </head>
 
   <body>
-    <!-- Bootstrap Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-darkorange">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="{{ url_for('views.home')}}">BeerCraft</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                aria-current="page"
-                href="{{ url_for('views.home')}}"
-                >Home</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('views.recipes_view')}}"
-                >Recipes</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('views.sessions_view')}}"
-                >Sessions</a
-              >
-            </li>
-          </ul>
-        </div>
-        {% if 'profile' not in session %}
-        <div>
-          <a
-            class="btn btn-outline-light btn-login"
-            href="{{ url_for('auth.login')}}"
-            >Log In</a
+    <div class="content">
+      <!-- Bootstrap Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-darkorange">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{{ url_for('views.home')}}"
+            >BeerCraft</a
           >
-        </div>
-        {% else %}
-        <div>
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item avatar">
-              <img
-                id="useravatar"
-                class="rounded-circle"
-                src="{{session['profile']['picture']}}"
-                alt="avatar"
-              />
-            </li>
-          </ul>
-        </div>
-        <div>
-          <a
-            class="btn btn-outline-light btn-login"
-            href="{{ url_for('auth.logout')}}"
-            >Log Out</a
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
           >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  aria-current="page"
+                  href="{{ url_for('views.home')}}"
+                  >Home</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('views.recipes_view')}}"
+                  >Recipes</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('views.sessions_view')}}"
+                  >Sessions</a
+                >
+              </li>
+            </ul>
+          </div>
+          {% if 'profile' not in session %}
+          <div>
+            <a
+              class="btn btn-outline-light btn-login"
+              href="{{ url_for('auth.login')}}"
+              >Log In</a
+            >
+          </div>
+          {% else %}
+          <div>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item avatar">
+                <img
+                  id="useravatar"
+                  class="rounded-circle"
+                  src="{{session['profile']['picture']}}"
+                  alt="avatar"
+                />
+              </li>
+            </ul>
+          </div>
+          <div>
+            <a
+              class="btn btn-outline-light btn-login"
+              href="{{ url_for('auth.logout')}}"
+              >Log Out</a
+            >
+          </div>
+          {% endif %}
         </div>
-        {% endif %}
-      </div>
-    </nav>
-    <!-- Content -->
-    <div class="page-content">{% block content %} {% endblock %}</div>
+      </nav>
+      <!-- Content -->
+      <div class="page-content">{% block content %} {% endblock %}</div>
+    </div>
     <!-- Footer -->
     <footer class="footer-container">
       <p class="p-footer">© 2022 François Bilodeau</p>
